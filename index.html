@@ -72,6 +72,13 @@
     <h1>QRコードスキャン画面</h1>
     <button id="scanBtn">QRコードを読み取る</button>
 
+    <h2>手入力フォーム</h2>
+    <label>品番:</label>
+    <input type="text" id="manualProductCode">
+    <label>工程番号:</label>
+    <input type="text" id="manualProcessCode">
+    <button onclick="startManualEntry()">次へ</button>
+
     <h2>登録済みデータ</h2>
     <table id="dataTable" border="1">
         <thead>

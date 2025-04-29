@@ -118,13 +118,18 @@ function clearQuantity() {
 function confirmQuantity() {
     let quantity = parseInt(document.getElementById("quantityInput").value) || 0;
     if (quantity > 0) {
-        let productCode = "ABC123";   // 仮の品番
-        let processCode = "P001";     // 仮の工程
+        // QRコード or 手入力から取得
+        let productCode = manualProductCode || "ABC123";  // 仮コードは残しつつ
+        let processCode = manualProcessCode || "P001";
 
         saveData(productCode, processCode, quantity);
         alert("データを登録しました！");
         displayData();
         closeModal();
+
+        // 入力値リセット
+        manualProductCode = "";
+        manualProcessCode = "";
     } else {
         alert("数量を入力してください！");
     }
@@ -372,3 +377,23 @@ function sendDataToGAS(dataArray) {
       alert("送信に失敗しました");
     });
   }
+
+
+  let manualProductCode = "";
+let manualProcessCode = "";
+
+// 手入力フォームの処理
+function startManualEntry() {
+    const product = document.getElementById("manualProductCode").value.trim();
+    const process = document.getElementById("manualProcessCode").value.trim();
+
+    if (!product || !process) {
+        alert("品番と工程番号を両方入力してください。");
+        return;
+    }
+
+    manualProductCode = product;
+    manualProcessCode = process;
+
+    openModal();  // 既存の数量入力モーダルを再利用
+}
