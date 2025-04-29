@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>在庫登録システム</title>
+
+    <style>
+        .quantity-btn {
+            width: 80px;
+            height: 40px;
+            font-size: 16px;
+            margin: 5px;
+            border-radius: 8px;
+        }
+    </style>
+
+</head>
+<!-- 削除確認モーダル -->
+<div id="deleteModal" style="display:none; position:fixed; top:25%; left:50%; transform:translateX(-50%); background:white; padding:20px; border:1px solid #ccc; z-index:1001;">
+    <h2>本当にこのデータを削除しますか？<br>削除すると、データは完全に消えます。</h2>
+    <button onclick="confirmDelete()">削除する</button>
+    <button onclick="closeDeleteModal()">キャンセル</button>
+</div>
+
+<!-- 登録モーダル -->
+<div id="customModal" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:white; padding:20px; border:1px solid #ccc; z-index:1000;">
+    <h2>数量を入力してください</h2>
+        <!-- 数量入力欄 -->
+        <input type="number" id="quantityInput" value="0" min="0" style="font-size:24px; width:100px; text-align:center; margin:10px;">
+
+    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+        <button class="quantity-btn" data-value="1">+1</button>
+        <button class="quantity-btn" data-value="10">+10</button>
+        <button class="quantity-btn" data-value="100">+100</button>
+    </div>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+        <button class="quantity-btn" data-value="-1">-1</button>
+        <button class="quantity-btn" data-value="-10">-10</button>
+        <button class="quantity-btn" data-value="-100">-100</button>
+    </div>
+    <button onclick="clearQuantity()">クリア</button>
+    <br><br>
+    <button onclick="confirmQuantity()">登録する</button>
+    <button onclick="closeModal()">キャンセル</button>
+</div>
+
+<!-- 編集用モーダル -->
+<div id="editModal" style="display:none; position:fixed; top:25%; left:50%; transform:translateX(-50%); background:white; padding:20px; border:1px solid #ccc; z-index:1000;">
+    <h2>数量を編集してください</h2>
+
+    <!-- 数量入力欄 -->
+    <input type="number" id="editQuantityInput" value="0" min="0" style="font-size:24px; width:100px; text-align:center; margin:10px;">
+
+    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+        <button class="quantity-btn" data-value="1">+1</button>
+        <button class="quantity-btn" data-value="10">+10</button>
+        <button class="quantity-btn" data-value="100">+100</button>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 10px;">
+        <button class="quantity-btn" data-value="-1">-1</button>
+        <button class="quantity-btn" data-value="-10">-10</button>
+        <button class="quantity-btn" data-value="-100">-100</button>
+    </div>
+
+    <div style="text-align: center;">
+        <button onclick="confirmEdit()">保存する</button>
+        <button onclick="closeEditModal()">キャンセル</button>
+    </div>
+</div>
+<body>
+    <h1>QRコードスキャン画面</h1>
+    <button id="scanBtn">QRコードを読み取る</button>
+
+    <h2>登録済みデータ</h2>
+    <table id="dataTable" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>品番</th>
+                <th>工程</th>
+                <th>数量</th>
+                <th>登録日時</th>
+                <th>編集</th>
+                <th>削除</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- データはここに追加される -->
+        </tbody>
+    </table>
+    <!-- データ送信用のボタン -->
+    <button id="sendButton">送信</button>
+
+    <script src="app.js" defer></script>  <!-- app.jsを最後に読み込む -->
+</body>
+</html>
