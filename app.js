@@ -362,7 +362,7 @@ function getDataFromIndexedDB() {
 
 
 function sendDataToGAS(dataArray) {
-    fetch('https://script.google.com/macros/s/AKfycbzs4slkNs91SVm5btk2NvqldZECO5jt6sg7TzmBV3bJEztNnH7qAKIrqbsKzXe-ftUF/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbyvGHxdX0kAPoXpNDMTzKf-DLd1M5VlNN8W4XAa5Zn1nO5laXE8LOMdOvcr0qqn38An/exec', {
       method: 'POST',
       body: JSON.stringify(dataArray)
     })
