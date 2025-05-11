@@ -302,7 +302,8 @@ function saveData(productCode, processCode, quantity) {
         productCode: productCode,
         processCode: processCode,
         quantity: quantity,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        sent: false // 送信済みフラグ
     });
 }
 
@@ -342,14 +343,18 @@ function getDataFromIndexedDB() {
             const db = event.target.result;
             const transaction = db.transaction(['scannedData'], 'readonly');
             const objectStore = transaction.objectStore('scannedData');
-            const getRequest = objectStore.getAll(); // 全レコードを取得
+            const data = [];
 
-            getRequest.onsuccess = function() {
-                resolve(getRequest.result); // データ取得成功
-            };
-
-            getRequest.onerror = function() {
-                reject("データの取得に失敗しました");
+            objectStore.openCursor().onsuccess = function(event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    if (!cursor.value.sent) {
+                        data.push(cursor.value);
+                    }
+                    cursor.continue();
+                } else {
+                    resolve(data); // すべて取得完了
+                }
             };
         };
 
@@ -371,12 +376,28 @@ function sendDataToGAS(dataArray) {
       console.log("送信成功:", result);
       alert("送信完了しました！");
       // 送信成功後にローカルデータ削除などの処理もここに入れられる
+    // 送信済みフラグ更新
+    const transaction = db.transaction(["scannedData"], "readwrite");
+    const store = transaction.objectStore("scannedData");
+
+    dataArray.forEach(record => {
+        const getReq = store.get(record.id);
+        getReq.onsuccess = function(event) {
+            const data = event.target.result;
+            if (data) {
+                data.sent = true;
+                store.put(data); // sent:true に更新
+            }
+        };
+    });
+
+    displayData(); // 状態の反映
     })
     .catch(error => {
-      console.error("送信失敗:", error);
-      alert("送信に失敗しました");
+        console.error("送信失敗:", error);
+        alert("送信に失敗しました");
     });
-  }
+}
 
 
   let manualProductCode = "";
